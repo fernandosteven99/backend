@@ -9,6 +9,15 @@ class MessageRequest(BaseModel):
     receiver_id: int
     message: str
 
+@router.get("/unread/{user_id}")
+def get_unread(user_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM messages WHERE receiver_id = %s AND seen = FALSE", (user_id,))
+    count = cursor.fetchone()[0]
+    conn.close()
+    return {"count": count}
+
 @router.get("/{user_id}/{other_id}")
 def get_conversation(user_id: int, other_id: int):
     conn = get_connection()
@@ -23,15 +32,6 @@ def get_conversation(user_id: int, other_id: int):
     data = cursor.fetchall()
     conn.close()
     return [{"id": r[0], "sender_id": r[1], "receiver_id": r[2], "message": r[3], "seen": r[4], "created_at": str(r[5])} for r in data]
-
-@router.get("/unread/{user_id}")
-def get_unread(user_id: int):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM messages WHERE receiver_id = %s AND seen = FALSE", (user_id,))
-    count = cursor.fetchone()[0]
-    conn.close()
-    return {"count": count}
 
 @router.post("")
 def send_message(data: MessageRequest):

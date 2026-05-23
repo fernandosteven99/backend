@@ -1,11 +1,8 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import message_routes
-app.include_router(message_routes.router)
 
-from app.routes import sport_routes, schedule_routes, reservation_routes, role_routes, auth_routes, user_routes, email_routes
-
+from app.routes import sport_routes, schedule_routes, reservation_routes, role_routes, auth_routes, user_routes, email_routes, message_routes
 
 from app.routes import (
     location_routes,
@@ -43,6 +40,7 @@ app.include_router(auth_routes.router)
 app.include_router(user_routes.router)
 app.include_router(email_routes.router)
 app.include_router(student_routes.router)
+app.include_router(message_routes.router)
 
 @app.get("/")
 def root():

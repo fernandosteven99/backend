@@ -1,6 +1,8 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routes import message_routes
+app.include_router(message_routes.router)
 
 from app.routes import sport_routes, schedule_routes, reservation_routes, role_routes, auth_routes, user_routes, email_routes
 
